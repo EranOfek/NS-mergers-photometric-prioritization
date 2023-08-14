@@ -1,0 +1,27 @@
+                   - &     66 &    28\\ 
+                 AGN &    535 &    75\\ 
+                AGN? &     31 &     4\\ 
+                  CV &    135 &    39\\ 
+                 CV? &      6 &     5\\ 
+                 LBV &     11 &     3\\ 
+               Other &      6 &     1\\ 
+              SLSN-I &     23 &     3\\ 
+             SLSN-II &      1 &     1\\ 
+               SN II &    305 &    71\\ 
+              SN IIP &     26 &     6\\ 
+              SN IIb &      4 &     2\\ 
+              SN IIn &    127 &    27\\ 
+               SN Ia &    792 &   283\\ 
+           SN Ia-91T &     22 &    10\\ 
+           SN Ia-CSM &      3 &     1\\ 
+            SN Ia-SC &      1 &     1\\ 
+           SN Ia-pec &     13 &     2\\ 
+              SN Iax &      5 &     1\\ 
+               SN Ib &     12 &     3\\ 
+           SN Ib-pec &      2 &     1\\ 
+             SN Ib/c &      2 &     1\\ 
+              SN Ibn &      2 &     2\\ 
+               SN Ic &     31 &     7\\ 
+            SN Ic-BL &      9 &     2\\ 
+                 TDE &     28 &     6\\ 
+                nova &      2 &     2\\ 
