@@ -115,14 +115,9 @@ function plot_calc
     
     %% calc color and derivatives
     % search parameters
-    clear Data_g
-    clear Data_r
-    clear Data_Type
-    clear Data_Name
-    
     MaxSep = 30./24;
     MinSep = 18./24;
-    MaxErr = 0.1; %0.15; %0.05;
+    MaxErr = 0.3; %0.15; %0.05;
     
     
     UniqueNames = unique(T.ztf_name);
@@ -137,14 +132,14 @@ function plot_calc
         
         Tsn = T(FlagTran,:);
         
-        Flag_g = Tsn.filter==1;
-        Flag_r = Tsn.filter==2;
+        Flag_g = Tsn.filter==1 & Tsn.mag>14.5;
+        Flag_r = Tsn.filter==2 & Tsn.mag>14.5;
         Tsn_g  = Tsn(Flag_g,:);
         Tsn_r  = Tsn(Flag_r,:);
         
         Used_g = false(size(Tsn_g,1),1);
-        Used_r = false(size(Tsn_r,1),1);
-        
+        Used_r = false(size(Tsn_r,1),1); 
+
         Nep_g = size(Tsn_g,1);
         for Ig=1:1:Nep_g
             
@@ -156,10 +151,12 @@ function plot_calc
             
             
             if sum(Flag_g)>=3 && sum(Flag_r)>=3 && Range_g>MinSep && Range_r>MinSep && ~any(Used_g(Flag_g)) && ~any(Used_r(Flag_r))
+                % candidate found
+
                 Used_g(Flag_g) = true;
                 Used_r(Flag_r) = true;
                 
-                % candidate found
+
                 Counter = Counter + 1;
                
                 MeanT_g = mean(Tsn_g.jdobs(Flag_g));
@@ -212,7 +209,7 @@ function plot_calc
     % 15639, 588, 27
         
     %% generate [g-r, rdor, gdot]
-        ColorMagDot = array2table([Data_g(:,1), Data_g(:,2) - Data_r(:,2), max(0.015, sqrt(Data_g(:,3).^2 + Data_r(:,3).^2)),Data_g(:,4), Data_g(:,5), Data_r(:,4), Data_r(:,5), Data_g(:,6), Data_r(:,6)]);
+    ColorMagDot = array2table([Data_g(:,1), Data_g(:,2) - Data_r(:,2), max(0.015, sqrt(Data_g(:,3).^2 + Data_r(:,3).^2)),Data_g(:,4), Data_g(:,5), Data_r(:,4), Data_r(:,5), Data_g(:,6), Data_r(:,6)]);
 
     ColorMagDot.Properties.VariableNames = {'mjd','gr','grErr','gdot','gdotErr','rdot','rdotErr','gJD','rJD'};
     ColorMagDot.Name  = Data_Name(:);
@@ -290,7 +287,7 @@ function plot_calc
     AddObjects.Properties.VariableNames = {'gr','gdot'};
     AddObjects.Name = {'AT2018lqh','M85OT-1','SN2019ghp','SN2013fs'}';
     
-    % print table of GW170817 data
+    %% print table of GW170817 data
     FID = fopen('Table_GW170817_Colors.txt','w');
     %tools.table.fprintf(FID, '%4.1f  %5.2f %5.2f %5.2f   %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f\n',GW170817);
     tools.table.fprintf(FID, '$%4.1f$ &  $%5.2f$ & $%5.2f$ & $%5.2f$ &   $%5.2f$ & $%5.2f$ & $%5.2f$ & $%5.2f$ & $%5.2f$ & $%5.2f$ & $%5.2f$ & $%5.2f$ & $%5.2f$ \\\\ \n',GW170817);
@@ -364,6 +361,14 @@ function plot_calc
     plot(X,N./sum(N),'k-','LineWidth',2);
     hold on
     plot(X,Nf./sum(Nf),'b-','LineWidth',2)
+
+    %save gDotHist01.mat X N Nf  
+    load gDotHist01.mat
+    plot(X,N./sum(N),'k--','LineWidth',2);
+    hold on
+    plot(X,Nf./sum(Nf),'b--','LineWidth',2)
+
+
     set(gca,'YS','log')
     axis([-1 1 3e-4 1])
 
@@ -387,20 +392,21 @@ function plot_calc
         plot(X,Nmem./sum(Nmem),'b--','LineWidth',1,'Color',Color(Igroup,:))
     end
 
-    legend('All','first','AGN','CV','SN','SN Ia')    
+    legend('All','first','AGN','CV','SN','SN Ia','All 0.1','first 0.1')    
 
-    print gdot_hist.eps -depsc2
+    %print gdot_hist.eps -depsc2
 
     %% table of types numbers
 
     FID = fopen('Table_ObjTypes.txt','w');
     Ntype = numel(UniqueType);
+    SS = [0 0 0];
     for Itype=1:1:Ntype
         FlagTT = strcmp(ColorMagDot.type,UniqueType{Itype});
         NuniqueObj = numel(unique(ColorMagDot.Name(FlagTT)));
 
         fprintf(FID, '%20s &  %5d & %5d\\\\ \n',UniqueType{Itype}, sum(FlagTT), NuniqueObj)
-        
+        SS = SS + [0, sum(FlagTT), NuniqueObj];
     end
 
 
@@ -419,6 +425,7 @@ function plot_calc
      -0.16,-0.98, 'AT2021hoz','CV';...
      0.48, -0.91, 'AT2018cch','AGN';...
      0.93,-0.81, 'AT2018ief','AGN';...
+     -0.24,1.72, 'AT2020plo','CV';...
      0.25,0.88,  'AT2019cmi','AGN'};
 
 
@@ -575,13 +582,79 @@ function plot_calc
     H = ylabel('$\dot{g}$ [mag/day]');
     H.FontSize = 18;
     H.Interpreter = 'latex';
-    
+    %
     axis([-3.2 1.5 -3.2 2.5])
         
     
     print GW_rdot_gdot.eps -depsc2
     print GW_rdot_gdot.jpg -djpeg100
     
+
+    %% gdot vs. gdot-rdot
+    
+    % plot BT sample
+    Color = 'k';
+    %plot.errorxy([ColorMagDot.rdot, ColorMagDot.gdot,ColorMagDot.rdotErr, ColorMagDot.gdotErr],...
+    %                    'ColX',1, 'ColY',2, 'ColXe',3, 'ColYe',4, 'EdgeColor',Color, 'FaceColor',Color, 'MarkSize',4);
+    
+    %plot.errorxy1([ColorMagDot.rdot, ColorMagDot.gdot,ColorMagDot.rdotErr, ColorMagDot.gdotErr],'MarkerSize',3);
+    plot.errorxy1([ColorMagDot.gdot(~FlagIa)-ColorMagDot.rdot(~FlagIa), ColorMagDot.gdot(~FlagIa),...
+        sqrt(ColorMagDot.rdotErr(~FlagIa).^2 + ColorMagDot.gdotErr(~FlagIa).^2),...
+        ColorMagDot.gdotErr(~FlagIa)],'MarkerSize',3);
+    hold on;
+    plot.errorxy1([ColorMagDot.gdot(FlagIa)-ColorMagDot.rdot(FlagIa),   ColorMagDot.gdot(FlagIa),...
+        sqrt(ColorMagDot.rdotErr(FlagIa).^2 + ColorMagDot.gdotErr(FlagIa).^2),...
+        ColorMagDot.gdotErr(FlagIa)],...
+        'MarkerSize',2,'MarkerFaceColor',ColorIa,'MarkerEdgeColor',ColorIa,'LineColor',ColorIa);
+    
+    %plot(ColorMagDot.rdot, ColorMagDot.gdot,'k.');
+    
+    % 18gep line
+    Igep = find(strcmp(ColorMagDot.Name,'SN2018gep'));
+    plot(ColorMagDot.rdot(Igep),ColorMagDot.gdot(Igep), 'r-')
+    
+    % plot GW170817               
+    hold on;
+    plot(GW170817.rdot, GW170817.gdot,'k-','Color',[0.8 0.8 0.8], 'LineWidth',2);
+    scatter(GW170817.rdot, GW170817.gdot, 50, GW170817.t, 'filled');
+    H = colorbar;
+    H.Label.String = 'Age [days]';
+    H.Label.Interpreter = 'latex';
+    % time labels
+    for It=1:1:numel(GW170817.t)
+        if GW170817.t(It)<3.6
+            Ht = text(GW170817.rdot(It)+0.02, GW170817.gdot(It)+0.2, sprintf('%3.1f',GW170817.t(It)));
+            Ht.Interpreter = 'latex';
+        end
+    end
+    
+    % plot Arcavi 2018
+    plot(ColorMagDotA.rdot, ColorMagDotA.gdot, 'k-','Color',[0.8 0.8 0.8], 'LineWidth',1);
+    scatter(ColorMagDotA.rdot, ColorMagDotA.gdot, 50, ColorMagDotA.phase)
+    
+    % plot models
+    Color = plot.generate_colors(Npar);
+    for Ipar=1:1:Npar
+        Hmodel = plot(Model(Ipar).Table.rdot, Model(Ipar).Table.gdot,'k-');
+        Hmodel.Color = Color(Ipar,:);
+    end
+    
+    H = xlabel('$\dot{g} - \dot{r}$ [mag/day]');
+    H.FontSize = 18;
+    H.Interpreter = 'latex';
+    H = ylabel('$\dot{g}$ [mag/day]');
+    H.FontSize = 18;
+    H.Interpreter = 'latex';
+    %
+    axis([-3.2 1.5 -3.2 2.5])
+        
+    
+    print GW_gdot_gdotrdot.eps -depsc2
+    print GW_gdot_gdotrdot.jpg -djpeg100
+    
+
+
+
     %% PCA / g-r vs. rdot vs. gdot
     
     GW_Data = [GW170817.gr, GW170817.gdot, GW170817.rdot];
