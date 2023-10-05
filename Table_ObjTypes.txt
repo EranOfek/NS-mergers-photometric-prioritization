@@ -1,27 +1,25 @@
-                   - &     66 &    28\\ 
-                 AGN &    535 &    75\\ 
-                AGN? &     31 &     4\\ 
-                  CV &    135 &    39\\ 
-                 CV? &      6 &     5\\ 
-                 LBV &     11 &     3\\ 
-               Other &      6 &     1\\ 
-              SLSN-I &     23 &     3\\ 
-             SLSN-II &      1 &     1\\ 
-               SN II &    305 &    71\\ 
-              SN IIP &     26 &     6\\ 
-              SN IIb &      4 &     2\\ 
-              SN IIn &    127 &    27\\ 
-               SN Ia &    792 &   283\\ 
-           SN Ia-91T &     22 &    10\\ 
-           SN Ia-CSM &      3 &     1\\ 
-            SN Ia-SC &      1 &     1\\ 
-           SN Ia-pec &     13 &     2\\ 
-              SN Iax &      5 &     1\\ 
-               SN Ib &     12 &     3\\ 
-           SN Ib-pec &      2 &     1\\ 
-             SN Ib/c &      2 &     1\\ 
-              SN Ibn &      2 &     2\\ 
-               SN Ic &     31 &     7\\ 
-            SN Ic-BL &      9 &     2\\ 
-                 TDE &     28 &     6\\ 
-                nova &      2 &     2\\ 
+                   - &    114 &    33\\ 
+                 AGN &    713 &    80\\ 
+                AGN? &     46 &     8\\ 
+                  CV &    181 &    44\\ 
+                 CV? &      8 &     4\\ 
+                 LBV &     16 &     3\\ 
+               Other &      1 &     1\\ 
+              SLSN-I &     19 &     4\\ 
+             SLSN-II &     17 &     3\\ 
+               SN II &    472 &    92\\ 
+              SN IIP &     36 &     8\\ 
+              SN IIb &     11 &     3\\ 
+              SN IIn &    206 &    30\\ 
+               SN Ia &   1184 &   318\\ 
+           SN Ia-91T &     40 &     8\\ 
+          SN Ia-91bg &      3 &     1\\ 
+           SN Ia-CSM &      9 &     1\\ 
+           SN Ia-pec &     15 &     2\\ 
+              SN Iax &      7 &     2\\ 
+               SN Ib &     34 &    10\\ 
+             SN Ib/c &      8 &     2\\ 
+               SN Ic &     50 &    12\\ 
+            SN Ic-BL &     18 &     4\\ 
+                 TDE &     27 &     4\\ 
+                nova &      1 &     1\\ 
